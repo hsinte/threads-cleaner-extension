@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Threads 封鎖名單</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <img src="/logo.png" alt="" class="logo" />
+        <h1>封鎖名單</h1>
+      </header>
+
+      <form id="add-form" class="add-form">
+        <input
+          id="add-input"
+          type="text"
+          placeholder="使用者名稱或個人檔案網址"
+          aria-label="新增封鎖使用者"
+          autocomplete="off"
+        />
+        <button type="submit">新增</button>
+      </form>
+
+      <section class="community">
+        <div class="community__header">
+          <span class="community__title">社群清單</span>
+          <button type="button" id="community-refresh-button">更新</button>
+        </div>
+        <p id="community-status" class="community__status"></p>
+      </section>
+
+      <div class="toolbar">
+        <button type="button" id="export-button" class="toolbar__button">
+          匯出本地名單
+        </button>
+        <button type="button" id="import-button" class="toolbar__button">
+          匯入本地名單
+        </button>
+        <input
+          type="file"
+          id="import-file-input"
+          accept=".txt,text/plain"
+          hidden
+        />
+      </div>
+
+      <input
+        id="search-input"
+        type="text"
+        class="search-input"
+        placeholder="搜尋已封鎖的使用者"
+        aria-label="搜尋已封鎖的使用者"
+        autocomplete="off"
+      />
+
+      <p id="count-label" class="count-label"></p>
+
+      <ul id="block-list" class="block-list"></ul>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

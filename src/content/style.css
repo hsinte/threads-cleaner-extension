@@ -1,0 +1,7 @@
+.threads-block-button {
+  margin-left: 4px;
+
+  cursor: pointer;
+
+  transition: opacity 0.15s;
+}
