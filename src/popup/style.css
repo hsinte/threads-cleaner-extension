@@ -1,8 +1,46 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
+
+  --bg: #101010;
+  --bg-elevated: #1c1c1c;
+  --bg-elevated-hover: #262626;
+  --border: #333333;
+  --border-subtle: #262626;
+  --border-focus: #666666;
+  --text: #f5f5f5;
+  --text-dim: #cccccc;
+  --text-muted: #999999;
+  --text-subtle: #777777;
+  --accent: #f5f5f5;
+  --accent-text: #101010;
+  --accent-hover: #d8d8d8;
+  --danger: #ff6b6b;
+  --danger-bg-hover: rgba(255, 107, 107, 0.15);
+  --backdrop: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --bg-elevated: #f2f2f2;
+  --bg-elevated-hover: #e6e6e6;
+  --border: #d9d9d9;
+  --border-subtle: #e5e5e5;
+  --border-focus: #999999;
+  --text: #1a1a1a;
+  --text-dim: #4d4d4d;
+  --text-muted: #6b6b6b;
+  --text-subtle: #8a8a8a;
+  --accent: #1a1a1a;
+  --accent-text: #ffffff;
+  --accent-hover: #333333;
+  --danger: #d9403f;
+  --danger-bg-hover: rgba(217, 64, 63, 0.12);
+  --backdrop: rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -11,13 +49,14 @@
 
 body {
   margin: 0;
-  width: 320px;
-  background-color: #101010;
-  color: #f5f5f5;
+  width: 380px;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 #app {
-  padding: 16px;
+  padding: 18px;
+  min-height: 460px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -43,10 +82,10 @@ body {
   flex: 1;
 }
 
-.header__feedback-button {
-  border: 1px solid #333;
+.header__icon-button {
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background-color: #1c1c1c;
+  background-color: var(--bg-elevated);
   color: inherit;
   width: 26px;
   height: 26px;
@@ -56,21 +95,21 @@ body {
   flex-shrink: 0;
 }
 
-.header__feedback-button:hover {
-  background-color: #262626;
+.header__icon-button:hover {
+  background-color: var(--bg-elevated-hover);
 }
 
 .feedback-dialog {
-  border: 1px solid #333;
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background-color: #101010;
-  color: #f5f5f5;
-  width: 300px;
+  background-color: var(--bg);
+  color: var(--text);
+  width: 340px;
   padding: 0;
 }
 
 .feedback-dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--backdrop);
 }
 
 .feedback-form {
@@ -91,14 +130,14 @@ body {
   flex-direction: column;
   gap: 4px;
   font-size: 12px;
-  color: #ccc;
+  color: var(--text-dim);
 }
 
 .feedback-field select,
 .feedback-field textarea,
 .feedback-field input {
-  background-color: #1c1c1c;
-  border: 1px solid #333;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 6px;
   color: inherit;
   padding: 8px 10px;
@@ -111,14 +150,14 @@ body {
 .feedback-field textarea:focus,
 .feedback-field input:focus {
   outline: none;
-  border-color: #666;
+  border-color: var(--border-focus);
 }
 
 .feedback-fill-button {
   align-self: flex-start;
-  border: 1px solid #333;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background-color: #1c1c1c;
+  background-color: var(--bg-elevated);
   color: inherit;
   padding: 6px 10px;
   font-size: 12px;
@@ -126,25 +165,35 @@ body {
 }
 
 .feedback-fill-button:hover {
-  background-color: #262626;
+  background-color: var(--bg-elevated-hover);
 }
 
 .feedback-status {
   margin: 0;
   font-size: 12px;
-  color: #999;
+  color: var(--text-muted);
   min-height: 14px;
 }
 
 .feedback-status.status--error {
-  color: #ff6b6b;
+  color: var(--danger);
 }
 
 .feedback-actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
   margin-top: 4px;
+}
+
+.feedback-actions h2 {
+  margin: 0;
+}
+
+.feedback-actions__buttons {
+  display: flex;
+  gap: 8px;
 }
 
 .feedback-actions button {
@@ -162,22 +211,22 @@ body {
 }
 
 #feedback-cancel-button {
-  background-color: #1c1c1c;
+  background-color: var(--bg-elevated);
   color: inherit;
-  border: 1px solid #333;
+  border: 1px solid var(--border);
 }
 
 #feedback-cancel-button:hover:not(:disabled) {
-  background-color: #262626;
+  background-color: var(--bg-elevated-hover);
 }
 
 #feedback-submit-button {
-  background-color: #f5f5f5;
-  color: #101010;
+  background-color: var(--accent);
+  color: var(--accent-text);
 }
 
 #feedback-submit-button:hover:not(:disabled) {
-  background-color: #d8d8d8;
+  background-color: var(--accent-hover);
 }
 
 .add-form {
@@ -191,8 +240,8 @@ body {
 }
 
 input[type="text"] {
-  background-color: #1c1c1c;
-  border: 1px solid #333;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 6px;
   color: inherit;
   padding: 8px 10px;
@@ -202,14 +251,14 @@ input[type="text"] {
 
 input[type="text"]:focus {
   outline: none;
-  border-color: #666;
+  border-color: var(--border-focus);
 }
 
 .add-form button {
   border: none;
   border-radius: 6px;
-  background-color: #f5f5f5;
-  color: #101010;
+  background-color: var(--accent);
+  color: var(--accent-text);
   padding: 0 14px;
   font-size: 13px;
   font-weight: 600;
@@ -218,20 +267,20 @@ input[type="text"]:focus {
 }
 
 .add-form button:hover {
-  background-color: #d8d8d8;
+  background-color: var(--accent-hover);
 }
 
 .count-label {
   margin: 0;
   font-size: 12px;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .block-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 280px;
+  max-height: 340px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -242,7 +291,7 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #1c1c1c;
+  background-color: var(--bg-elevated);
   border-radius: 6px;
   padding: 8px 10px;
 }
@@ -257,7 +306,7 @@ input[type="text"]:focus {
 .block-item__remove {
   border: none;
   background: transparent;
-  color: #ff6b6b;
+  color: var(--danger);
   font-size: 12px;
   cursor: pointer;
   padding: 4px 8px;
@@ -266,12 +315,12 @@ input[type="text"]:focus {
 }
 
 .block-item__remove:hover {
-  background-color: rgba(255, 107, 107, 0.15);
+  background-color: var(--danger-bg-hover);
 }
 
 .empty-state {
   text-align: center;
-  color: #777;
+  color: var(--text-subtle);
   font-size: 13px;
   padding: 24px 0;
 }
@@ -283,9 +332,9 @@ input[type="text"]:focus {
 
 .toolbar__button {
   flex: 1;
-  border: 1px solid #333;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background-color: #1c1c1c;
+  background-color: var(--bg-elevated);
   color: inherit;
   padding: 7px 8px;
   font-size: 12px;
@@ -293,11 +342,11 @@ input[type="text"]:focus {
 }
 
 .toolbar__button:hover {
-  background-color: #262626;
+  background-color: var(--bg-elevated-hover);
 }
 
 .community {
-  border: 1px solid #262626;
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   padding: 8px 10px;
   display: flex;
@@ -314,14 +363,14 @@ input[type="text"]:focus {
 .community__title {
   font-size: 12px;
   font-weight: 600;
-  color: #ccc;
+  color: var(--text-dim);
 }
 
 .community__header button {
   border: none;
   border-radius: 6px;
-  background-color: #f5f5f5;
-  color: #101010;
+  background-color: var(--accent);
+  color: var(--accent-text);
   padding: 4px 10px;
   font-size: 12px;
   font-weight: 600;
@@ -329,7 +378,7 @@ input[type="text"]:focus {
 }
 
 .community__header button:hover {
-  background-color: #d8d8d8;
+  background-color: var(--accent-hover);
 }
 
 .community__header button:disabled {
@@ -340,18 +389,18 @@ input[type="text"]:focus {
 .community__status {
   margin: 0;
   font-size: 11px;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .community__status.status--error {
-  color: #ff6b6b;
+  color: var(--danger);
 }
 
 .block-item__badge {
   flex-shrink: 0;
   font-size: 11px;
-  color: #999;
-  border: 1px solid #333;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 2px 8px;
 }

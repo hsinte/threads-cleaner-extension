@@ -2,6 +2,7 @@ import { BlockListManager } from "@/core/BlockListManager";
 import { BlockSourceStorage } from "@/storage/BlockSourceStorage";
 import { FeedbackController } from "./FeedbackController";
 import { PopupController } from "./PopupController";
+import { ThemeController } from "./ThemeController";
 import "./style.css";
 
 function queryElement<T extends HTMLElement>(selector: string): T {
@@ -15,6 +16,14 @@ function queryElement<T extends HTMLElement>(selector: string): T {
 }
 
 async function bootstrap(): Promise<void> {
+  //
+  // 主題盡早套用,減少畫面閃爍
+  //
+  const themeController = new ThemeController(
+    queryElement<HTMLButtonElement>("#theme-toggle-button"),
+  );
+  const themeReady = themeController.initialize();
+
   const manager = new BlockListManager(new BlockSourceStorage());
 
   const controller = new PopupController(manager, {
@@ -55,6 +64,8 @@ async function bootstrap(): Promise<void> {
     submitButton: queryElement<HTMLButtonElement>("#feedback-submit-button"),
     statusMessage: queryElement<HTMLElement>("#feedback-status"),
   });
+
+  await themeReady;
 }
 
 void bootstrap();

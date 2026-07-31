@@ -11,8 +11,16 @@
         <h1>封鎖名單</h1>
         <button
           type="button"
+          id="theme-toggle-button"
+          class="header__icon-button"
+          title="切換淺色/深色主題"
+        >
+          🌙
+        </button>
+        <button
+          type="button"
           id="feedback-open-button"
-          class="header__feedback-button"
+          class="header__icon-button"
           title="問題回報 / 意見回饋 / 提供名單"
         >
           💬
@@ -69,8 +77,13 @@
 
     <dialog id="feedback-dialog" class="feedback-dialog">
       <form id="feedback-form" class="feedback-form">
-        <h2>意見回饋</h2>
-
+        <div class="feedback-actions">
+          <h2>意見回饋</h2>
+          <div class="feedback-actions__buttons">
+            <button type="button" id="feedback-cancel-button">取消</button>
+            <button type="submit" id="feedback-submit-button">提交</button>
+          </div>
+        </div>
         <label class="feedback-field">
           <span>類型</span>
           <select id="feedback-type">
@@ -85,7 +98,7 @@
           id="feedback-fill-list-button"
           class="feedback-fill-button"
         >
-          帶入目前的本地封鎖清單
+          載入目前的本地封鎖清單
         </button>
 
         <label class="feedback-field">
@@ -117,11 +130,6 @@
         </label>
 
         <p id="feedback-status" class="feedback-status"></p>
-
-        <div class="feedback-actions">
-          <button type="button" id="feedback-cancel-button">取消</button>
-          <button type="submit" id="feedback-submit-button">提交</button>
-        </div>
       </form>
     </dialog>
 
