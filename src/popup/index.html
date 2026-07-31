@@ -9,6 +9,22 @@
       <header class="header">
         <img src="/logo.png" alt="" class="logo" />
         <h1>封鎖名單</h1>
+        <button
+          type="button"
+          id="theme-toggle-button"
+          class="header__icon-button"
+          title="切換淺色/深色主題"
+        >
+          🌙
+        </button>
+        <button
+          type="button"
+          id="feedback-open-button"
+          class="header__icon-button"
+          title="問題回報 / 意見回饋 / 提供名單"
+        >
+          💬
+        </button>
       </header>
 
       <form id="add-form" class="add-form">
@@ -58,6 +74,65 @@
 
       <ul id="block-list" class="block-list"></ul>
     </div>
+
+    <dialog id="feedback-dialog" class="feedback-dialog">
+      <form id="feedback-form" class="feedback-form">
+        <div class="feedback-actions">
+          <h2>意見回饋</h2>
+          <div class="feedback-actions__buttons">
+            <button type="button" id="feedback-cancel-button">取消</button>
+            <button type="submit" id="feedback-submit-button">提交</button>
+          </div>
+        </div>
+        <label class="feedback-field">
+          <span>類型</span>
+          <select id="feedback-type">
+            <option value="提供名單" selected>提供名單</option>
+            <option value="問題回報">問題回報</option>
+            <option value="意見回饋">意見回饋</option>
+          </select>
+        </label>
+
+        <button
+          type="button"
+          id="feedback-fill-list-button"
+          class="feedback-fill-button"
+        >
+          載入目前的本地封鎖清單
+        </button>
+
+        <label class="feedback-field">
+          <span>描述</span>
+          <textarea
+            id="feedback-description"
+            rows="5"
+            placeholder="請描述問題、建議,或貼上要提供的清單內容"
+          ></textarea>
+        </label>
+
+        <label class="feedback-field">
+          <span>電子郵件(選填)</span>
+          <input
+            id="feedback-email"
+            type="email"
+            placeholder="方便的話,留下 email 讓我們回覆你"
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="feedback-field">
+          <span>附件(選填)</span>
+          <input
+            id="feedback-file"
+            type="file"
+            accept=".txt,text/plain,image/*"
+          />
+        </label>
+
+        <p id="feedback-status" class="feedback-status"></p>
+      </form>
+    </dialog>
+
     <script type="module" src="./main.ts"></script>
   </body>
 </html>
