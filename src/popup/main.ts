@@ -1,5 +1,6 @@
 import { BlockListManager } from "@/core/BlockListManager";
 import { BlockSourceStorage } from "@/storage/BlockSourceStorage";
+import { FeedbackController } from "./FeedbackController";
 import { PopupController } from "./PopupController";
 import "./style.css";
 
@@ -32,6 +33,28 @@ async function bootstrap(): Promise<void> {
   });
 
   await controller.initialize();
+
+  //
+  // FeedbackController 需要跟 popup 主流程共用同一個 manager 實例,
+  // 「帶入目前清單」按鈕才能拿到已經 initialize() 過的資料
+  //
+  new FeedbackController(manager, {
+    openButton: queryElement<HTMLButtonElement>("#feedback-open-button"),
+    dialog: queryElement<HTMLDialogElement>("#feedback-dialog"),
+    form: queryElement<HTMLFormElement>("#feedback-form"),
+    typeSelect: queryElement<HTMLSelectElement>("#feedback-type"),
+    fillListButton: queryElement<HTMLButtonElement>(
+      "#feedback-fill-list-button",
+    ),
+    descriptionInput: queryElement<HTMLTextAreaElement>(
+      "#feedback-description",
+    ),
+    emailInput: queryElement<HTMLInputElement>("#feedback-email"),
+    fileInput: queryElement<HTMLInputElement>("#feedback-file"),
+    cancelButton: queryElement<HTMLButtonElement>("#feedback-cancel-button"),
+    submitButton: queryElement<HTMLButtonElement>("#feedback-submit-button"),
+    statusMessage: queryElement<HTMLElement>("#feedback-status"),
+  });
 }
 
 void bootstrap();

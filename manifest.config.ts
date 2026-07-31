@@ -22,5 +22,8 @@ export default defineManifest({
     },
   ],
   permissions: ["storage"],
-  host_permissions: ["https://cdn.jsdelivr.net/*"],
+  host_permissions: [
+    "https://cdn.jsdelivr.net/*",
+    "https://hsinte-mail.qazx0931.workers.dev/*",
+  ],
 });

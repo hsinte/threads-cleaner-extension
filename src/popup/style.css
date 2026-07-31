@@ -40,6 +40,144 @@ body {
   font-size: 15px;
   margin: 0;
   font-weight: 600;
+  flex: 1;
+}
+
+.header__feedback-button {
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #1c1c1c;
+  color: inherit;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.header__feedback-button:hover {
+  background-color: #262626;
+}
+
+.feedback-dialog {
+  border: 1px solid #333;
+  border-radius: 10px;
+  background-color: #101010;
+  color: #f5f5f5;
+  width: 300px;
+  padding: 0;
+}
+
+.feedback-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.feedback-form {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback-form h2 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.feedback-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.feedback-field select,
+.feedback-field textarea,
+.feedback-field input {
+  background-color: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: inherit;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.feedback-field select:focus,
+.feedback-field textarea:focus,
+.feedback-field input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.feedback-fill-button {
+  align-self: flex-start;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #1c1c1c;
+  color: inherit;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.feedback-fill-button:hover {
+  background-color: #262626;
+}
+
+.feedback-status {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+  min-height: 14px;
+}
+
+.feedback-status.status--error {
+  color: #ff6b6b;
+}
+
+.feedback-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.feedback-actions button {
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#feedback-cancel-button {
+  background-color: #1c1c1c;
+  color: inherit;
+  border: 1px solid #333;
+}
+
+#feedback-cancel-button:hover:not(:disabled) {
+  background-color: #262626;
+}
+
+#feedback-submit-button {
+  background-color: #f5f5f5;
+  color: #101010;
+}
+
+#feedback-submit-button:hover:not(:disabled) {
+  background-color: #d8d8d8;
 }
 
 .add-form {
