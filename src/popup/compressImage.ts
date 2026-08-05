@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export interface EncodedAttachment {
   filename: string;
   mimeType: string;
@@ -44,7 +46,7 @@ async function compressImageFile(file: File): Promise<EncodedAttachment> {
   const context = canvas.getContext("2d");
 
   if (!context) {
-    throw new Error("無法建立畫布,瀏覽器不支援圖片壓縮");
+    throw new Error(t("compressCanvasUnsupported"));
   }
 
   context.drawImage(bitmap, 0, 0, width, height);
@@ -74,14 +76,14 @@ function fileToBase64(file: File): Promise<string> {
       const result = reader.result;
 
       if (typeof result !== "string") {
-        reject(new Error("讀取檔案失敗"));
+        reject(new Error(t("fileReadFailed")));
         return;
       }
 
       resolve(result.split(",")[1] ?? "");
     };
 
-    reader.onerror = () => reject(new Error("讀取檔案失敗"));
+    reader.onerror = () => reject(new Error(t("fileReadFailed")));
 
     reader.readAsDataURL(file);
   });

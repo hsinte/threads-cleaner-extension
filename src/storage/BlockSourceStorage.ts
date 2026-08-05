@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export interface SubscriptionData {
   name: string;
   users: string[];
@@ -139,7 +141,7 @@ export class BlockSourceStorage {
         name:
           typeof rawSubscription.name === "string"
             ? rawSubscription.name
-            : "社群清單",
+            : t("communityTitle"),
         users: this.ensureStringArray(rawSubscription.users),
         contentHash:
           typeof rawSubscription.contentHash === "string"

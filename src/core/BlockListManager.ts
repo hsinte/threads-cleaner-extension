@@ -5,6 +5,7 @@ import {
 import { COMMUNITY_LIST_URL } from "./constants";
 import { parseBlockListText } from "./blockListFormat";
 import { sha256 } from "./sha256";
+import { t } from "@/i18n";
 
 export interface BlockEntry {
   username: string;
@@ -171,7 +172,7 @@ export class BlockListManager {
     const subscription = this.data.subscriptions[COMMUNITY_LIST_URL];
 
     return {
-      name: subscription?.name ?? "社群清單",
+      name: subscription?.name ?? t("communityTitle"),
       count: subscription?.users.length ?? 0,
       fetchedAt: subscription?.fetchedAt ?? null,
     };
@@ -189,7 +190,9 @@ export class BlockListManager {
       if (!response.ok) {
         return {
           status: "error",
-          message: `下載失敗(HTTP ${response.status})`,
+          message: t("communityDownloadHttpError", {
+            status: response.status,
+          }),
         };
       }
 
@@ -201,15 +204,15 @@ export class BlockListManager {
       return {
         status: "error",
         message: isTimeout
-          ? "下載逾時,請稍後再試一次"
-          : "下載失敗,請確認網路連線後再試一次",
+          ? t("communityDownloadTimeout")
+          : t("communityDownloadFailed"),
       };
     }
 
     const parsed = parseBlockListText(text);
 
     if (parsed.users.length === 0) {
-      return { status: "error", message: "清單內容是空的,或格式無法辨識" };
+      return { status: "error", message: t("communityEmptyOrInvalid") };
     }
 
     const contentHash = await sha256(text);
@@ -234,7 +237,7 @@ export class BlockListManager {
       subscriptions: {
         ...this.data.subscriptions,
         [COMMUNITY_LIST_URL]: {
-          name: parsed.meta.Title ?? "社群清單",
+          name: parsed.meta.Title ?? t("communityTitle"),
           users: parsed.users,
           contentHash,
           fetchedAt: Date.now(),

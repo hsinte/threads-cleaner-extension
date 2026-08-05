@@ -2,13 +2,13 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <title>Threads 封鎖名單</title>
+    <title>Threads Cleaner</title>
   </head>
   <body>
     <div id="app">
       <header class="header">
         <img src="/logo.png" alt="" class="logo" />
-        <h1>封鎖名單</h1>
+        <h1 data-i18n="headerTitle">封鎖名單</h1>
         <button
           type="button"
           id="theme-toggle-button"
@@ -21,6 +21,7 @@
           type="button"
           id="feedback-open-button"
           class="header__icon-button"
+          data-i18n-title="feedbackButtonTitle"
           title="問題回報 / 意見回饋 / 提供名單"
         >
           💬
@@ -34,23 +35,43 @@
           placeholder="使用者名稱或個人檔案網址"
           aria-label="新增封鎖使用者"
           autocomplete="off"
+          data-i18n-placeholder="addPlaceholder"
+          data-i18n-aria-label="addAriaLabel"
         />
-        <button type="submit">新增</button>
+        <button type="submit" data-i18n="addButton">新增</button>
       </form>
 
       <section class="community">
         <div class="community__header">
-          <span class="community__title">社群清單</span>
-          <button type="button" id="community-refresh-button">更新</button>
+          <span class="community__title" data-i18n="communityTitle"
+            >社群清單</span
+          >
+          <button
+            type="button"
+            id="community-refresh-button"
+            data-i18n="communityRefreshButton"
+          >
+            更新
+          </button>
         </div>
         <p id="community-status" class="community__status"></p>
       </section>
 
       <div class="toolbar">
-        <button type="button" id="export-button" class="toolbar__button">
+        <button
+          type="button"
+          id="export-button"
+          class="toolbar__button"
+          data-i18n="exportButton"
+        >
           匯出本地名單
         </button>
-        <button type="button" id="import-button" class="toolbar__button">
+        <button
+          type="button"
+          id="import-button"
+          class="toolbar__button"
+          data-i18n="importButton"
+        >
           匯入本地名單
         </button>
         <input
@@ -68,6 +89,8 @@
         placeholder="搜尋已封鎖的使用者"
         aria-label="搜尋已封鎖的使用者"
         autocomplete="off"
+        data-i18n-placeholder="searchPlaceholder"
+        data-i18n-aria-label="searchPlaceholder"
       />
 
       <p id="count-label" class="count-label"></p>
@@ -78,18 +101,36 @@
     <dialog id="feedback-dialog" class="feedback-dialog">
       <form id="feedback-form" class="feedback-form">
         <div class="feedback-actions">
-          <h2>意見回饋</h2>
+          <h2 data-i18n="feedbackTitle">意見回饋</h2>
           <div class="feedback-actions__buttons">
-            <button type="button" id="feedback-cancel-button">取消</button>
-            <button type="submit" id="feedback-submit-button">提交</button>
+            <button
+              type="button"
+              id="feedback-cancel-button"
+              data-i18n="feedbackCancel"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              id="feedback-submit-button"
+              data-i18n="feedbackSubmit"
+            >
+              提交
+            </button>
           </div>
         </div>
         <label class="feedback-field">
-          <span>類型</span>
+          <span data-i18n="feedbackTypeLabel">類型</span>
           <select id="feedback-type">
-            <option value="提供名單" selected>提供名單</option>
-            <option value="問題回報">問題回報</option>
-            <option value="意見回饋">意見回饋</option>
+            <option value="提供名單" selected data-i18n="feedbackTypeSubmitList">
+              提供名單
+            </option>
+            <option value="問題回報" data-i18n="feedbackTypeBugReport">
+              問題回報
+            </option>
+            <option value="意見回饋" data-i18n="feedbackTypeSuggestion">
+              意見回饋
+            </option>
           </select>
         </label>
 
@@ -97,31 +138,34 @@
           type="button"
           id="feedback-fill-list-button"
           class="feedback-fill-button"
+          data-i18n="feedbackLoadListButton"
         >
           載入目前的本地封鎖清單
         </button>
 
         <label class="feedback-field">
-          <span>描述</span>
+          <span data-i18n="feedbackDescriptionLabel">描述</span>
           <textarea
             id="feedback-description"
             rows="5"
             placeholder="請描述問題、建議,或貼上要提供的清單內容"
+            data-i18n-placeholder="feedbackDescriptionPlaceholder"
           ></textarea>
         </label>
 
         <label class="feedback-field">
-          <span>電子郵件(選填)</span>
+          <span data-i18n="feedbackEmailLabel">電子郵件(選填)</span>
           <input
             id="feedback-email"
             type="email"
             placeholder="方便的話,留下 email 讓我們回覆你"
             autocomplete="off"
+            data-i18n-placeholder="feedbackEmailPlaceholder"
           />
         </label>
 
         <label class="feedback-field">
-          <span>附件(選填)</span>
+          <span data-i18n="feedbackAttachmentLabel">附件(選填)</span>
           <input
             id="feedback-file"
             type="file"

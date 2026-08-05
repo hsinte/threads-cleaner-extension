@@ -1,4 +1,5 @@
 import { BlockListManager } from "@/core/BlockListManager";
+import { t } from "@/i18n";
 import { ThreadPost } from "./ThreadPost";
 
 /**
@@ -27,7 +28,9 @@ export class BlockButtonInjector {
   }
 
   private async handleClick(post: ThreadPost): Promise<void> {
-    const confirmed = window.confirm(`是否封鎖 @${post.username}?`);
+    const confirmed = window.confirm(
+      t("blockConfirm", { username: post.username }),
+    );
 
     if (!confirmed) {
       return;

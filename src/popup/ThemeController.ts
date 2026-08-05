@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 const STORAGE_KEY = "popup-theme";
 
 type Theme = "light" | "dark";
@@ -46,6 +48,8 @@ export class ThemeController {
     document.documentElement.dataset.theme = this.theme;
     this.toggleButton.textContent = this.theme === "dark" ? "☀️" : "🌙";
     this.toggleButton.title =
-      this.theme === "dark" ? "切換成淺色主題" : "切換成深色主題";
+      this.theme === "dark"
+        ? t("themeToggleToLight")
+        : t("themeToggleToDark");
   }
 }

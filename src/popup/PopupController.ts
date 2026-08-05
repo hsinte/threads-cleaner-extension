@@ -4,6 +4,7 @@ import {
   serializeBlockListText,
 } from "@/core/blockListFormat";
 import { normalizeUsername } from "@/core/normalizeUsername";
+import { getIntlLocale, t } from "@/i18n";
 import { PopupElements } from "./PopupElements";
 
 /**
@@ -70,7 +71,7 @@ export class PopupController {
   }
 
   private async handleRemove(username: string): Promise<void> {
-    const confirmed = window.confirm(`是否解除封鎖 @${username}?`);
+    const confirmed = window.confirm(t("unblockConfirm", { username }));
 
     if (!confirmed) {
       return;
@@ -85,7 +86,7 @@ export class PopupController {
     const users = this.manager.getManualUsers();
 
     const text = serializeBlockListText(users, {
-      Title: "本地封鎖清單",
+      Title: t("exportTitle"),
       Exported: new Date().toISOString(),
     });
 
@@ -117,17 +118,14 @@ export class PopupController {
     try {
       text = await file.text();
     } catch {
-      this.showCommunityMessage("匯入失敗:無法讀取檔案內容", true);
+      this.showCommunityMessage(t("importReadFailed"), true);
       return;
     }
 
     const parsed = parseBlockListText(text);
 
     if (parsed.users.length === 0) {
-      this.showCommunityMessage(
-        "匯入失敗:檔案內容是空的,或格式無法辨識",
-        true,
-      );
+      this.showCommunityMessage(t("importEmptyOrInvalid"), true);
       return;
     }
 
@@ -137,17 +135,23 @@ export class PopupController {
     this.render();
 
     const skippedNote =
-      parsed.skippedLines > 0 ? `,略過 ${parsed.skippedLines} 行無法辨識` : "";
+      parsed.skippedLines > 0
+        ? t("importSkippedNote", { count: parsed.skippedLines })
+        : "";
 
     this.showCommunityMessage(
-      `匯入完成:新增 ${addedCount} 位,重複 ${duplicateCount} 位${skippedNote}`,
+      t("importSuccess", {
+        added: addedCount,
+        duplicate: duplicateCount,
+        skippedNote,
+      }),
       false,
     );
   }
 
   private async handleCommunityRefresh(): Promise<void> {
     this.elements.communityRefreshButton.disabled = true;
-    this.showCommunityMessage("更新中...", false);
+    this.showCommunityMessage(t("communityRefreshing"), false);
 
     const result = await this.manager.refreshCommunityList();
 
@@ -159,10 +163,17 @@ export class PopupController {
     }
 
     if (result.status === "unchanged") {
-      this.showCommunityMessage(`已是最新版本(共 ${result.total} 位)`, false);
+      this.showCommunityMessage(
+        t("communityUnchanged", { total: result.total }),
+        false,
+      );
     } else {
       this.showCommunityMessage(
-        `已更新:+${result.added} / -${result.removed}(共 ${result.total} 位)`,
+        t("communityUpdated", {
+          added: result.added,
+          removed: result.removed,
+          total: result.total,
+        }),
         false,
       );
     }
@@ -180,14 +191,20 @@ export class PopupController {
     const status = this.manager.getCommunityListStatus();
 
     if (!status.fetchedAt) {
-      this.showCommunityMessage("尚未下載過社群清單", false);
+      this.showCommunityMessage(t("communityNeverFetched"), false);
       return;
     }
 
-    const updatedAt = new Date(status.fetchedAt).toLocaleString("zh-TW");
+    const updatedAt = new Date(status.fetchedAt).toLocaleString(
+      getIntlLocale(),
+    );
 
     this.showCommunityMessage(
-      `${status.name}:共 ${status.count} 位(上次更新 ${updatedAt})`,
+      t("communityStatus", {
+        name: status.name,
+        count: status.count,
+        updatedAt,
+      }),
       false,
     );
   }
@@ -214,7 +231,7 @@ export class PopupController {
   private renderCount(): void {
     const total = this.manager.getEntries().length;
 
-    this.elements.countLabel.textContent = `已封鎖 ${total} 位使用者`;
+    this.elements.countLabel.textContent = t("countLabel", { count: total });
   }
 
   private renderList(entries: BlockEntry[]): void {
@@ -234,9 +251,7 @@ export class PopupController {
     const li = document.createElement("li");
 
     li.className = "empty-state";
-    li.textContent = this.searchQuery
-      ? "找不到符合的使用者"
-      : "輸入關鍵字以搜尋已封鎖的使用者";
+    li.textContent = this.searchQuery ? t("searchNoResult") : t("searchHint");
 
     return li;
   }
@@ -254,8 +269,8 @@ export class PopupController {
     if (entry.source === "community") {
       const badge = document.createElement("span");
       badge.className = "block-item__badge";
-      badge.textContent = "社群";
-      badge.title = "來自社群清單";
+      badge.textContent = t("communityBadge");
+      badge.title = t("communityBadgeTitle");
 
       li.append(badge);
     }
@@ -263,7 +278,7 @@ export class PopupController {
     const removeButton = document.createElement("button");
     removeButton.type = "button";
     removeButton.className = "block-item__remove";
-    removeButton.textContent = "解除封鎖";
+    removeButton.textContent = t("unblockButton");
 
     removeButton.addEventListener("click", () => {
       void this.handleRemove(entry.username);

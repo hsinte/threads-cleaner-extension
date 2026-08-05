@@ -1,4 +1,5 @@
 import { BlockListManager } from "@/core/BlockListManager";
+import { t } from "@/i18n";
 import { serializeBlockListText } from "@/core/blockListFormat";
 import { encodeAttachment, EncodedAttachment } from "./compressImage";
 import { FeedbackElements } from "./FeedbackElements";
@@ -90,12 +91,12 @@ export class FeedbackController {
     const users = this.blockListManager.getManualUsers();
 
     if (users.length === 0) {
-      this.setStatus("目前沒有本地封鎖清單可以帶入", true);
+      this.setStatus(t("feedbackFillListEmpty"), true);
       return;
     }
 
     const text = serializeBlockListText(users, {
-      Title: "本地封鎖清單",
+      Title: t("exportTitle"),
       Exported: new Date().toISOString(),
     });
 
@@ -118,7 +119,7 @@ export class FeedbackController {
       type !== TYPE_WITHOUT_REQUIRED_DESCRIPTION &&
       description.length === 0
     ) {
-      this.setStatus("請填寫描述內容", true);
+      this.setStatus(t("feedbackDescriptionRequired"), true);
       this.elements.descriptionInput.focus();
       return;
     }
@@ -129,17 +130,17 @@ export class FeedbackController {
       let attachment: EncodedAttachment | null = null;
 
       if (file) {
-        this.setStatus("處理附件中...", false);
+        this.setStatus(t("feedbackProcessingAttachment"), false);
         attachment = await encodeAttachment(file);
 
         if (attachment.base64.length > MAX_ATTACHMENT_BASE64_LENGTH) {
-          this.setStatus("附件太大,請壓縮後再試,或換一張較小的截圖", true);
+          this.setStatus(t("feedbackAttachmentTooLarge"), true);
           this.setSubmitting(false);
           return;
         }
       }
 
-      this.setStatus("送出中...", false);
+      this.setStatus(t("feedbackSubmitting"), false);
 
       const response = await fetch(SUBMIT_ENDPOINT, {
         method: "POST",
@@ -151,13 +152,13 @@ export class FeedbackController {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      this.setStatus("已送出,謝謝你的回饋!", false);
+      this.setStatus(t("feedbackSubmitSuccess"), false);
 
       window.setTimeout(() => {
         this.closeDialog();
       }, 1200);
     } catch {
-      this.setStatus("送出失敗,請確認網路連線後再試一次", true);
+      this.setStatus(t("feedbackSubmitFailed"), true);
       this.setSubmitting(false);
     }
   }

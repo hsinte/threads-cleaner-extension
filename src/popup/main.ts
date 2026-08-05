@@ -1,5 +1,6 @@
 import { BlockListManager } from "@/core/BlockListManager";
 import { BlockSourceStorage } from "@/storage/BlockSourceStorage";
+import { applyStaticTranslations, getHtmlLang, t } from "@/i18n";
 import { FeedbackController } from "./FeedbackController";
 import { PopupController } from "./PopupController";
 import { ThemeController } from "./ThemeController";
@@ -9,13 +10,20 @@ function queryElement<T extends HTMLElement>(selector: string): T {
   const element = document.querySelector<T>(selector);
 
   if (!element) {
-    throw new Error(`找不到元素: ${selector}`);
+    throw new Error(t("elementNotFound", { selector }));
   }
 
   return element;
 }
 
 async function bootstrap(): Promise<void> {
+  //
+  // 語言偵測是同步的,盡早套用靜態文字,不會有畫面閃爍
+  //
+  document.documentElement.lang = getHtmlLang();
+  document.title = t("headerTitle");
+  applyStaticTranslations();
+
   //
   // 主題盡早套用,減少畫面閃爍
   //
@@ -45,7 +53,7 @@ async function bootstrap(): Promise<void> {
 
   //
   // FeedbackController 需要跟 popup 主流程共用同一個 manager 實例,
-  // 「帶入目前清單」按鈕才能拿到已經 initialize() 過的資料
+  // 「載入目前清單」按鈕才能拿到已經 initialize() 過的資料
   //
   new FeedbackController(manager, {
     openButton: queryElement<HTMLButtonElement>("#feedback-open-button"),

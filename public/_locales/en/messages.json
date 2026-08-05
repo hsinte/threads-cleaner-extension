@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "Threads Cleaner"
+  },
+  "extDescription": {
+    "message": "Block specific Threads users so their posts stop showing up in your feed, single posts, and search results."
+  }
+}

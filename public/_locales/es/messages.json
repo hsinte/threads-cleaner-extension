@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "Threads Cleaner"
+  },
+  "extDescription": {
+    "message": "Bloquea usuarios concretos de Threads para que sus publicaciones dejen de aparecer en tu feed, en las publicaciones individuales y en los resultados de búsqueda."
+  }
+}

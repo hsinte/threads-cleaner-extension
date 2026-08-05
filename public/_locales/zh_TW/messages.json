@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "脆脆清道夫(Threads Cleaner)"
+  },
+  "extDescription": {
+    "message": "封鎖特定的 Threads 使用者,讓他們的貼文不再出現在動態消息、單篇貼文與搜尋結果裡。"
+  }
+}

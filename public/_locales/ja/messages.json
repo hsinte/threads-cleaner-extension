@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "Threads Cleaner"
+  },
+  "extDescription": {
+    "message": "特定の Threads ユーザーをブロックし、フィード・投稿・検索結果に投稿が表示されないようにします。"
+  }
+}
