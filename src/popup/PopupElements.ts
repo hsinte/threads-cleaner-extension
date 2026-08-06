@@ -9,6 +9,7 @@ export interface PopupElements {
   importFileInput: HTMLInputElement;
 
   communityRefreshButton: HTMLButtonElement;
+  communityAutoUpdateCheckbox: HTMLInputElement;
   communityStatus: HTMLElement;
 
   listElement: HTMLUListElement;

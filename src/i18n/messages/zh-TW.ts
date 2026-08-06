@@ -55,6 +55,9 @@ export const messages = {
   feedbackSubmitFailed: "送出失敗,請確認網路連線後再試一次",
   compressCanvasUnsupported: "無法建立畫布,瀏覽器不支援圖片壓縮",
   fileReadFailed: "讀取檔案失敗",
+  communityAutoUpdateLabel: "自動更新",
+  communityAutoUpdateTitle:
+    "勾選後,每次開啟這個視窗時,如果距離上次檢查超過一天,會自動檢查社群清單有沒有更新",
   elementNotFound: "找不到元素:{selector}",
 } as const;
 

@@ -1,4 +1,8 @@
-import { BlockEntry, BlockListManager } from "@/core/BlockListManager";
+import {
+  BlockEntry,
+  BlockListManager,
+  RefreshResult,
+} from "@/core/BlockListManager";
 import {
   parseBlockListText,
   serializeBlockListText,
@@ -24,6 +28,11 @@ export class PopupController {
     this.bindEvents();
     this.render();
     this.renderCommunityStatus();
+
+    this.elements.communityAutoUpdateCheckbox.checked =
+      this.manager.isAutoUpdateEnabled();
+
+    void this.runAutoUpdateIfDue();
   }
 
   private bindEvents(): void {
@@ -54,6 +63,13 @@ export class PopupController {
     this.elements.communityRefreshButton.addEventListener("click", () => {
       void this.handleCommunityRefresh();
     });
+
+    this.elements.communityAutoUpdateCheckbox.addEventListener(
+      "change",
+      () => {
+        void this.handleAutoUpdateToggle();
+      },
+    );
   }
 
   private async handleAdd(): Promise<void> {
@@ -157,6 +173,40 @@ export class PopupController {
 
     this.elements.communityRefreshButton.disabled = false;
 
+    this.applyRefreshResult(result);
+  }
+
+  private async handleAutoUpdateToggle(): Promise<void> {
+    const enabled = this.elements.communityAutoUpdateCheckbox.checked;
+
+    await this.manager.setAutoUpdateEnabled(enabled);
+
+    if (!enabled) {
+      return;
+    }
+
+    //
+    // 剛打開自動更新,如果已經超過一天沒檢查過,馬上檢查一次,
+    // 不用等到下次重新打開 popup。
+    //
+    await this.runAutoUpdateIfDue();
+  }
+
+  /**
+   * popup 開啟、或剛打開自動更新開關時呼叫。
+   * 是否真的觸發檢查由 BlockListManager 內部判斷(有沒有勾選、隔了多久)。
+   */
+  private async runAutoUpdateIfDue(): Promise<void> {
+    const result = await this.manager.maybeAutoRefreshCommunityList();
+
+    if (!result) {
+      return;
+    }
+
+    this.applyRefreshResult(result);
+  }
+
+  private applyRefreshResult(result: RefreshResult): void {
     if (result.status === "error") {
       this.showCommunityMessage(result.message, true);
       return;
