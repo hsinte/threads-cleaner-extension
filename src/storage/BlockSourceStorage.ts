@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { isExtensionContextInvalidated } from "./extensionContext";
 
 export interface SubscriptionData {
   name: string;
@@ -36,17 +37,33 @@ export class BlockSourceStorage {
   private static readonly LEGACY_KEY = "local-block-users";
 
   public async load(): Promise<BlockSourcesData> {
-    const result = await chrome.storage.local.get({
-      [BlockSourceStorage.KEY]: null,
-    });
+    try {
+      const result = await chrome.storage.local.get({
+        [BlockSourceStorage.KEY]: null,
+      });
 
-    return this.ensureShape(result[BlockSourceStorage.KEY]);
+      return this.ensureShape(result[BlockSourceStorage.KEY]);
+    } catch (error) {
+      if (isExtensionContextInvalidated(error)) {
+        return emptyData();
+      }
+
+      throw error;
+    }
   }
 
   public async save(data: BlockSourcesData): Promise<void> {
-    await chrome.storage.local.set({
-      [BlockSourceStorage.KEY]: data,
-    });
+    try {
+      await chrome.storage.local.set({
+        [BlockSourceStorage.KEY]: data,
+      });
+    } catch (error) {
+      if (isExtensionContextInvalidated(error)) {
+        return;
+      }
+
+      throw error;
+    }
   }
 
   /**
@@ -71,9 +88,23 @@ export class BlockSourceStorage {
       onChange(this.ensureShape(change.newValue));
     };
 
-    chrome.storage.onChanged.addListener(listener);
+    try {
+      chrome.storage.onChanged.addListener(listener);
+    } catch (error) {
+      if (!isExtensionContextInvalidated(error)) {
+        throw error;
+      }
+    }
 
-    return () => chrome.storage.onChanged.removeListener(listener);
+    return () => {
+      try {
+        chrome.storage.onChanged.removeListener(listener);
+      } catch (error) {
+        if (!isExtensionContextInvalidated(error)) {
+          throw error;
+        }
+      }
+    };
   }
 
   /**
@@ -81,28 +112,34 @@ export class BlockSourceStorage {
    * 不管有沒有搬移,舊 key 用不到了就清掉。
    */
   public async migrateLegacyIfNeeded(): Promise<void> {
-    const result = await chrome.storage.local.get({
-      [BlockSourceStorage.KEY]: null,
-      [BlockSourceStorage.LEGACY_KEY]: null,
-    });
+    try {
+      const result = await chrome.storage.local.get({
+        [BlockSourceStorage.KEY]: null,
+        [BlockSourceStorage.LEGACY_KEY]: null,
+      });
 
-    const legacyValue = result[BlockSourceStorage.LEGACY_KEY];
+      const legacyValue = result[BlockSourceStorage.LEGACY_KEY];
 
-    if (legacyValue === null) {
-      return;
-    }
+      if (legacyValue === null) {
+        return;
+      }
 
-    const alreadyMigrated = result[BlockSourceStorage.KEY] !== null;
+      const alreadyMigrated = result[BlockSourceStorage.KEY] !== null;
 
-    if (!alreadyMigrated) {
-      const legacyUsers = this.ensureStringArray(legacyValue);
+      if (!alreadyMigrated) {
+        const legacyUsers = this.ensureStringArray(legacyValue);
 
-      if (legacyUsers.length > 0) {
-        await this.save({ ...emptyData(), manual: legacyUsers });
+        if (legacyUsers.length > 0) {
+          await this.save({ ...emptyData(), manual: legacyUsers });
+        }
+      }
+
+      await chrome.storage.local.remove(BlockSourceStorage.LEGACY_KEY);
+    } catch (error) {
+      if (!isExtensionContextInvalidated(error)) {
+        throw error;
       }
     }
-
-    await chrome.storage.local.remove(BlockSourceStorage.LEGACY_KEY);
   }
 
   private ensureShape(value: unknown): BlockSourcesData {

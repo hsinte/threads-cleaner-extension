@@ -357,16 +357,37 @@ input[type="text"]:focus {
 .community__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
 }
 
 .community__title {
+  flex: 1;
+  min-width: 0;
   font-size: 12px;
   font-weight: 600;
   color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.community__auto-update {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.community__auto-update input[type="checkbox"] {
+  cursor: pointer;
 }
 
 .community__header button {
+  flex-shrink: 0;
   border: none;
   border-radius: 6px;
   background-color: var(--accent);

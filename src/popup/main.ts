@@ -1,5 +1,6 @@
 import { BlockListManager } from "@/core/BlockListManager";
 import { BlockSourceStorage } from "@/storage/BlockSourceStorage";
+import { CommunityAutoUpdateStorage } from "@/storage/CommunityAutoUpdateStorage";
 import { applyStaticTranslations, getHtmlLang, t } from "@/i18n";
 import { FeedbackController } from "./FeedbackController";
 import { PopupController } from "./PopupController";
@@ -32,7 +33,10 @@ async function bootstrap(): Promise<void> {
   );
   const themeReady = themeController.initialize();
 
-  const manager = new BlockListManager(new BlockSourceStorage());
+  const manager = new BlockListManager(
+    new BlockSourceStorage(),
+    new CommunityAutoUpdateStorage(),
+  );
 
   const controller = new PopupController(manager, {
     searchInput: queryElement<HTMLInputElement>("#search-input"),
@@ -43,6 +47,9 @@ async function bootstrap(): Promise<void> {
     importFileInput: queryElement<HTMLInputElement>("#import-file-input"),
     communityRefreshButton: queryElement<HTMLButtonElement>(
       "#community-refresh-button",
+    ),
+    communityAutoUpdateCheckbox: queryElement<HTMLInputElement>(
+      "#community-auto-update-checkbox",
     ),
     communityStatus: queryElement<HTMLElement>("#community-status"),
     listElement: queryElement<HTMLUListElement>("#block-list"),

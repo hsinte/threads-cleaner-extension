@@ -2,10 +2,16 @@ import {
   BlockSourcesData,
   BlockSourceStorage,
 } from "@/storage/BlockSourceStorage";
+import {
+  AutoUpdateState,
+  CommunityAutoUpdateStorage,
+} from "@/storage/CommunityAutoUpdateStorage";
 import { COMMUNITY_LIST_URL } from "./constants";
 import { parseBlockListText } from "./blockListFormat";
 import { sha256 } from "./sha256";
 import { t } from "@/i18n";
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export interface BlockEntry {
   username: string;
@@ -43,12 +49,23 @@ export class BlockListManager {
 
   private effective: Set<string> = new Set();
 
-  constructor(private readonly storage: BlockSourceStorage) {}
+  private autoUpdate: AutoUpdateState = { enabled: false, lastCheckedAt: null };
+
+  constructor(
+    private readonly storage: BlockSourceStorage,
+    private readonly autoUpdateStorage: CommunityAutoUpdateStorage,
+  ) {}
 
   public async initialize(): Promise<void> {
     await this.storage.migrateLegacyIfNeeded();
 
-    this.data = await this.storage.load();
+    const [data, autoUpdate] = await Promise.all([
+      this.storage.load(),
+      this.autoUpdateStorage.load(),
+    ]);
+
+    this.data = data;
+    this.autoUpdate = autoUpdate;
 
     this.recomputeEffective();
   }
@@ -107,7 +124,9 @@ export class BlockListManager {
 
     this.data = {
       ...this.data,
-      manual: alreadyManual ? this.data.manual : [...this.data.manual, username],
+      manual: alreadyManual
+        ? this.data.manual
+        : [...this.data.manual, username],
       excluded: this.data.excluded.filter((user) => user !== username),
     };
 
@@ -178,7 +197,42 @@ export class BlockListManager {
     };
   }
 
+  public isAutoUpdateEnabled(): boolean {
+    return this.autoUpdate.enabled;
+  }
+
+  public async setAutoUpdateEnabled(enabled: boolean): Promise<void> {
+    if (this.autoUpdate.enabled === enabled) {
+      return;
+    }
+
+    this.autoUpdate = { ...this.autoUpdate, enabled };
+
+    await this.autoUpdateStorage.save(this.autoUpdate);
+  }
+
+  /**
+   * 使用者有勾選自動更新,而且距離上次檢查超過一天,才會真的檢查一次。
+   * 不管檢查結果是更新/沒變/失敗,都算「檢查過了」,今天不會再檢查第二次。
+   * 沒有觸發檢查的話回傳 null。
+   */
+  public async maybeAutoRefreshCommunityList(): Promise<RefreshResult | null> {
+    if (!this.autoUpdate.enabled) {
+      return null;
+    }
+
+    const { lastCheckedAt } = this.autoUpdate;
+
+    if (lastCheckedAt !== null && Date.now() - lastCheckedAt < ONE_DAY_MS) {
+      return null;
+    }
+
+    return this.refreshCommunityList();
+  }
+
   public async refreshCommunityList(): Promise<RefreshResult> {
+    await this.markChecked();
+
     let text: string;
 
     try {
@@ -254,6 +308,12 @@ export class BlockListManager {
     await this.storage.save(this.data);
 
     this.recomputeEffective();
+  }
+
+  private async markChecked(): Promise<void> {
+    this.autoUpdate = { ...this.autoUpdate, lastCheckedAt: Date.now() };
+
+    await this.autoUpdateStorage.save(this.autoUpdate);
   }
 
   private recomputeEffective(): void {

@@ -65,5 +65,8 @@ export const messages: Record<MessageKey, string> = {
   compressCanvasUnsupported:
     "No se pudo crear el lienzo; tu navegador no admite la compresión de imágenes",
   fileReadFailed: "Error al leer el archivo",
+  communityAutoUpdateLabel: "Actualización automática",
+  communityAutoUpdateTitle:
+    "Si está activado, al abrir esta ventana se comprobará automáticamente la lista de la comunidad si ha pasado más de un día desde la última comprobación",
   elementNotFound: "Elemento no encontrado: {selector}",
 };

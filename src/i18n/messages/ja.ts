@@ -62,5 +62,8 @@ export const messages: Record<MessageKey, string> = {
   compressCanvasUnsupported:
     "キャンバスを作成できません。お使いのブラウザは画像圧縮に対応していません",
   fileReadFailed: "ファイルの読み込みに失敗しました",
+  communityAutoUpdateLabel: "自動更新",
+  communityAutoUpdateTitle:
+    "有効にすると、このポップアップを開くたびに、前回の確認から1日以上経過している場合はコミュニティリストを自動的に確認します",
   elementNotFound: "要素が見つかりません:{selector}",
 };

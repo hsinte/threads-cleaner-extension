@@ -23,7 +23,7 @@ export default defineManifest({
       matches: ["https://www.threads.com/*"],
     },
   ],
-  permissions: ["storage"],
+  permissions: ["storage", "alarms"],
   host_permissions: [
     "https://cdn.jsdelivr.net/*",
     "https://hsinte-mail.qazx0931.workers.dev/*",

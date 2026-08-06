@@ -65,5 +65,8 @@ export const messages: Record<MessageKey, string> = {
   compressCanvasUnsupported:
     "Não foi possível criar o canvas; o teu navegador não suporta compressão de imagens",
   fileReadFailed: "Falha ao ler o ficheiro",
+  communityAutoUpdateLabel: "Atualização automática",
+  communityAutoUpdateTitle:
+    "Quando ativado, ao abrir esta janela é feita automaticamente uma verificação da lista da comunidade se tiver passado mais de um dia desde a última verificação",
   elementNotFound: "Elemento não encontrado: {selector}",
 };

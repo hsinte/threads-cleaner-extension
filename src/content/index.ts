@@ -5,12 +5,20 @@ import { PostVisibilityController } from "@/dom/PostVisibilityController";
 import { ThreadFeed } from "@/dom/ThreadFeed";
 import { ThreadObserver } from "@/dom/ThreadObserver";
 import { BlockSourceStorage } from "@/storage/BlockSourceStorage";
+import { CommunityAutoUpdateStorage } from "@/storage/CommunityAutoUpdateStorage";
 
 const parser = new PostParser();
 const feed = new ThreadFeed();
 const observer = new ThreadObserver(parser, feed);
 
-const blockListManager = new BlockListManager(new BlockSourceStorage());
+//
+// content script 不會觸發自動更新(那是 popup 開啟時才做的事),
+// 但 BlockListManager 的建構子需要這個參數,傳一個共用同一份 storage 的實例即可。
+//
+const blockListManager = new BlockListManager(
+  new BlockSourceStorage(),
+  new CommunityAutoUpdateStorage(),
+);
 await blockListManager.initialize();
 
 const visibilityController = new PostVisibilityController(blockListManager);
